@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     viewCountry(country) {
-      console.log('Contry::', country);
+      this.$router.push({path: `/country/${country}`});
     }
   },
 };
