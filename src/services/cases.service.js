@@ -16,7 +16,6 @@ export function getCasesByCountry() {
       .then(response => resolve(response.data))
       .catch(error => reject(error));
   });
-
 }
 
 /**
@@ -26,6 +25,20 @@ export function getWorldStats() {
   return new Promise((resolve, reject) => {
     axios
       .get(config.RAPIDAPI.URL + "/worldstat.php", {
+        headers: {
+          "x-rapidapi-host": config.RAPIDAPI.HOST,
+          "x-rapidapi-key": config.RAPIDAPI.API_KEY
+        }
+      })
+      .then(response => resolve(response.data))
+      .catch(error => reject(error));
+  });
+}
+
+export function getCasesForCountry(countryName) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(config.RAPIDAPI.URL+"/cases_by_particular_country.php?country="+countryName, {
         headers: {
           "x-rapidapi-host": config.RAPIDAPI.HOST,
           "x-rapidapi-key": config.RAPIDAPI.API_KEY
