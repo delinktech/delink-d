@@ -14,9 +14,9 @@
           </template>
 
           <template slot="footer">
-            <!-- <div class="stats">
-              <md-icon>date_range</md-icon>Last 24 Hours
-            </div> -->
+            <div class="stats">
+              <md-icon>date_range</md-icon>Last update {{lastUpdate}}
+            </div>
           </template>
         </stats-card>
       </div>
@@ -32,9 +32,9 @@
           </template>
 
           <template slot="footer">
-            <!-- <div class="stats">
-              <md-icon>local_offer</md-icon>Tracked from Github
-            </div> -->
+            <div class="stats">
+              <md-icon>date_range</md-icon>Last update {{lastUpdate}}
+            </div>
           </template>
         </stats-card>
       </div>
@@ -50,9 +50,9 @@
           </template>
 
           <template slot="footer">
-            <!-- <div class="stats">
-              <md-icon>update</md-icon>Just Updated
-            </div> -->
+            <div class="stats">
+              <md-icon>date_range</md-icon>Last update {{lastUpdate}}
+            </div>
           </template>
         </stats-card>
       </div>
@@ -68,10 +68,9 @@
           </template>
 
           <template slot="footer">
-            <!-- <div class="stats">
-              <md-icon class="text-danger">warning</md-icon>
-              <a href="#pablo">Get More Space...</a>
-            </div> -->
+            <div class="stats">
+              <md-icon>date_range</md-icon>Last update {{lastUpdate}}
+            </div>
           </template>
         </stats-card>
       </div>
@@ -270,7 +269,10 @@ export default {
   methods: {
     fetchData() {
       getWorldStats()
-        .then(response => (this.worldStats = response))
+        .then(response => {
+          this.lastUpdate = moment(response.statistic_taken_at).fromNow();
+          this.worldStats = response;
+        })
         .catch(error => console.log("Error::", error));
     }
   }
