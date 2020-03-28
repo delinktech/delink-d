@@ -178,7 +178,7 @@ export default {
         statistic_taken_at: null
       },
       // dailySalesChart: {
-      //   data: {
+      countries: [],
       //     labels: ["M", "T", "W", "T", "F", "S", "S"],
       //     series: [[12, 17, 7, 17, 23, 18, 38]]
       //   },
