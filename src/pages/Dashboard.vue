@@ -15,7 +15,8 @@
 
           <template slot="footer">
             <div class="stats">
-              <md-icon>date_range</md-icon>Last update {{lastUpdate}}
+              <md-icon>date_range</md-icon>
+              Last update {{lastUpdate}}
             </div>
           </template>
         </stats-card>
@@ -33,7 +34,8 @@
 
           <template slot="footer">
             <div class="stats">
-              <md-icon>date_range</md-icon>Last update {{lastUpdate}}
+              <md-icon>date_range</md-icon>
+              Last update {{lastUpdate}}
             </div>
           </template>
         </stats-card>
@@ -51,7 +53,8 @@
 
           <template slot="footer">
             <div class="stats">
-              <md-icon>date_range</md-icon>Last update {{lastUpdate}}
+              <md-icon>date_range</md-icon>
+              Last update {{lastUpdate}}
             </div>
           </template>
         </stats-card>
@@ -69,7 +72,8 @@
 
           <template slot="footer">
             <div class="stats">
-              <md-icon>date_range</md-icon>Last update {{lastUpdate}}
+              <md-icon>date_range</md-icon>
+              Last update {{lastUpdate}}
             </div>
           </template>
         </stats-card>
@@ -83,18 +87,19 @@
             <p class="category">All countries and number of corona cases</p>
           </md-card-header>
           <md-card-content>
-            <ordered-table table-header-color="orange"></ordered-table>
+            <ordered-table table-header-color="orange" :countries="countries"></ordered-table>
           </md-card-content>
         </md-card>
       </div>
 
       <!-- row 3 global data on charts -->
-      <!-- <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
+      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
         <chart-card
           :chart-data="dailySalesChart.data"
           :chart-options="dailySalesChart.options"
           :chart-type="'Line'"
-          data-background-color="blue">
+          data-background-color="blue"
+        >
           <template slot="content">
             <h4 class="title">Daily Sales</h4>
             <p class="category">
@@ -154,9 +159,10 @@
 </template>
 
 <script>
+import moment from "moment";
 import { getWorldStats } from "../services/cases.service";
-import {
-  StatsCard,
+import { getCasesByCountry } from "../services/cases.service";
+import { StatsCard, ChartCard, OrderedTable } from "@/components";
   ChartCard,
   OrderedTable
 } from "@/components";
@@ -177,7 +183,7 @@ export default {
         new_deaths: null,
         statistic_taken_at: null
       },
-      // dailySalesChart: {
+      lastUpdate: null,
       countries: [],
       //     labels: ["M", "T", "W", "T", "F", "S", "S"],
       //     series: [[12, 17, 7, 17, 23, 18, 38]]
@@ -264,14 +270,22 @@ export default {
     };
   },
   created() {
-    this.fetchData();
+    this.fetchWorldData();
+    this.fetchCountryData();
   },
   methods: {
-    fetchData() {
+    fetchWorldData() {
       getWorldStats()
         .then(response => {
           this.lastUpdate = moment(response.statistic_taken_at).fromNow();
           this.worldStats = response;
+        })
+        .catch(error => console.log("Error::", error));
+    },
+    fetchCountryData() {
+      getCasesByCountry()
+        .then(response => {
+          this.countries = response.countries_stat;
         })
         .catch(error => console.log("Error::", error));
     }
