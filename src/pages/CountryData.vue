@@ -79,7 +79,7 @@
         </stats-card>
       </div>
       <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
-        <stats-card data-background-color="red">
+        <stats-card data-background-color="purple">
           <template slot="header">
             <md-icon>people</md-icon>
           </template>
@@ -117,7 +117,7 @@
         </stats-card>
       </div>
       <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
-        <stats-card data-background-color="orange">
+        <stats-card data-background-color="red">
           <template slot="header">
             <md-icon>people</md-icon>
           </template>
