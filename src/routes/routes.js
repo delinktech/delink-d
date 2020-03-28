@@ -1,6 +1,7 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Dashboard from "@/pages/Dashboard.vue";
+import CountryData from "@/pages/CountryData.vue";
 
 const routes = [
   {
@@ -12,6 +13,10 @@ const routes = [
         path: "dashboard",
         name: "Dashboard",
         component: Dashboard
+      },
+      {
+        path: "/country/:name",
+        component: CountryData
       }
     ]
   }
