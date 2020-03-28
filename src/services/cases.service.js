@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = require("axios");
 import config from "../../config.json";
 
 /**
@@ -9,7 +9,7 @@ export function getCasesByCountry() {
     console.log(config);
     axios
       .get(config.RAPIDAPI.URL + "/cases_by_country.php", {
-        "headers": {
+        headers: {
           "x-rapidapi-host": config.RAPIDAPI.HOST,
           "x-rapidapi-key": config.RAPIDAPI.API_KEY
         }
@@ -27,7 +27,7 @@ export function getWorldStats() {
   return new Promise((resolve, reject) => {
     axios
       .get(config.RAPIDAPI.URL + "/worldstat.php", {
-        "headers": {
+        headers: {
           "x-rapidapi-host": config.RAPIDAPI.HOST,
           "x-rapidapi-key": config.RAPIDAPI.API_KEY
         }
