@@ -93,7 +93,7 @@
       </div>
 
       <!-- row 3 global data on charts -->
-      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
+      <!-- <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
         <chart-card
           :chart-data="dailySalesChart.data"
           :chart-options="dailySalesChart.options"
@@ -163,9 +163,6 @@ import moment from "moment";
 import { getWorldStats } from "../services/cases.service";
 import { getCasesByCountry } from "../services/cases.service";
 import { StatsCard, ChartCard, OrderedTable } from "@/components";
-  ChartCard,
-  OrderedTable
-} from "@/components";
 
 export default {
   components: {
