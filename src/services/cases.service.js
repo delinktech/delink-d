@@ -6,7 +6,6 @@ import config from "../../config.json";
  */
 export function getCasesByCountry() {
   return new Promise((resolve, reject) => {
-    console.log(config);
     axios
       .get(config.RAPIDAPI.URL + "/cases_by_country.php", {
         headers: {

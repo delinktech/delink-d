@@ -43,11 +43,11 @@ export default {
   },
   methods: {
     fetchData() {
-      // getCasesByCountry()
-      //   .then(response => {
-      //     this.countries = response.countries_stat;
-      //   })
-      //   .catch(error => console.log("Error::", error));
+      getCasesByCountry()
+        .then(response => {
+          this.countries = response.countries_stat;
+        })
+        .catch(error => console.log("Error::", error));
     }
   }
 };
