@@ -317,7 +317,12 @@ export default {
     fetchCountryData() {
       getCasesByCountry()
         .then(response => {
-          this.countries = response.countries_stat;
+          this.countries = response.countries_stat.sort((a, b) =>
+            parseFloat(a.cases.replace(/,/g, "")) <
+            parseFloat(b.cases.replace(/,/g, ""))
+              ? 1
+              : -1
+          );
           this.loadingCountryData = false;
         })
         .catch(error => console.log("Error::", error));
