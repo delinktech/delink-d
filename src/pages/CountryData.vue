@@ -221,11 +221,34 @@ export default {
           low: 0,
           high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-          }
+            top: 10,
+            right: 10,
+            bottom: 30,
+            left: 10
+          },
+          plugins: [
+            this.$Chartist.plugins.ctAxisTitle({
+              axisX: {
+                axisTitle: "Days",
+                axisClass: "ct-axis-title",
+                offset: {
+                  x: 0,
+                  y: 50
+                },
+                textAnchor: "middle"
+              },
+              axisY: {
+                axisTitle: "Cases (K)",
+                axisClass: "ct-axis-title",
+                offset: {
+                  x: 10,
+                  y: -5
+                },
+                textAnchor: "middle",
+                flipTitle: false
+              }
+            })
+          ]
         }
       }
     };
@@ -247,7 +270,7 @@ export default {
           this.maxNum = parseFloat(lastUpdateDay.total_cases.replace(/,/g, "")); // set the chart heighest number
 
           this.dailySalesChart.options.high =
-            this.maxNum >= 1000 ? (this.maxNum / 1000) : this.maxNum; // check if max num is > 1000 and devide by 1000
+            this.maxNum >= 1000 ? this.maxNum / 1000 : this.maxNum; // check if max num is > 1000 and devide by 1000
 
           // call function to display data on a chart
           this.mapData(response.stat_by_country);
