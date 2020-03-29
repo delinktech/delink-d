@@ -11,6 +11,12 @@
           <template slot="content">
             <p class="category">Total Cases</p>
             <h3 class="title">{{worldStats.total_cases}}</h3>
+            <md-progress-spinner
+              :md-diameter="30"
+              :md-stroke="3"
+              md-mode="indeterminate"
+              v-if="loadingWorldData"
+            ></md-progress-spinner>
           </template>
 
           <template slot="footer">
@@ -30,6 +36,12 @@
           <template slot="content">
             <p class="category">Total Recovered</p>
             <h3 class="title">{{worldStats.total_recovered}}</h3>
+            <md-progress-spinner
+              :md-diameter="30"
+              :md-stroke="3"
+              md-mode="indeterminate"
+              v-if="loadingWorldData"
+            ></md-progress-spinner>
           </template>
 
           <template slot="footer">
@@ -49,6 +61,12 @@
           <template slot="content">
             <p class="category">Total Deaths</p>
             <h3 class="title">{{worldStats.total_deaths}}</h3>
+            <md-progress-spinner
+              :md-diameter="30"
+              :md-stroke="3"
+              md-mode="indeterminate"
+              v-if="loadingWorldData"
+            ></md-progress-spinner>
           </template>
 
           <template slot="footer">
@@ -68,6 +86,12 @@
           <template slot="content">
             <p class="category">New Deaths</p>
             <h3 class="title">{{worldStats.new_deaths}}</h3>
+            <md-progress-spinner
+              :md-diameter="30"
+              :md-stroke="3"
+              md-mode="indeterminate"
+              v-if="loadingWorldData"
+            ></md-progress-spinner>
           </template>
 
           <template slot="footer">
@@ -87,6 +111,14 @@
             <p class="category">All countries and number of corona cases</p>
           </md-card-header>
           <md-card-content>
+            <div class="md-progress-container">
+              <md-progress-spinner
+                :md-diameter="50"
+                :md-stroke="3"
+                md-mode="indeterminate"
+                v-if="loadingCountryData"
+              ></md-progress-spinner>
+            </div>
             <ordered-table table-header-color="orange" :countries="countries"></ordered-table>
           </md-card-content>
         </md-card>
@@ -172,6 +204,8 @@ export default {
   },
   data() {
     return {
+      loadingWorldData: true,
+      loadingCountryData: true,
       worldStats: {
         total_cases: null,
         total_deaths: null,
@@ -276,6 +310,7 @@ export default {
         .then(response => {
           this.lastUpdate = moment(response.statistic_taken_at).fromNow();
           this.worldStats = response;
+          this.loadingWorldData = false;
         })
         .catch(error => console.log("Error::", error));
     },
@@ -283,9 +318,15 @@ export default {
       getCasesByCountry()
         .then(response => {
           this.countries = response.countries_stat;
+          this.loadingCountryData = false;
         })
         .catch(error => console.log("Error::", error));
     }
   }
 };
 </script>
+<style lang="scss" scoped>
+.md-progress-container {
+  text-align: center;
+}
+</style>
