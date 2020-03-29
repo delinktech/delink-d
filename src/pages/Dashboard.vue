@@ -189,6 +189,16 @@
           </template>
         </chart-card>
       </div>-->
+
+      <!-- snackbar -->
+      <md-snackbar
+        :md-position="position"
+        :md-duration="isInfinity ? Infinity : duration"
+        :md-active.sync="showSnackbar"
+        md-persistent
+      >
+        <span>Error loading data! Please try again</span>
+      </md-snackbar>
     </div>
   </div>
 </template>
@@ -220,7 +230,11 @@ export default {
       lastUpdate: null,
       lastUpdateTime: null,
       localTime: null,
-      countries: []
+      countries: [],
+      showSnackbar: false,
+      position: "center",
+      duration: 4000,
+      isInfinity: false
       //     labels: ["M", "T", "W", "T", "F", "S", "S"],
       //     series: [[12, 17, 7, 17, 23, 18, 38]]
       //   },
@@ -321,7 +335,7 @@ export default {
           this.worldStats = response;
           this.loadingWorldData = false;
         })
-        .catch(error => console.log("Error::", error));
+        .catch(error => (this.showSnackbar = true));
     },
     fetchCountryData() {
       getCasesByCountry()
@@ -334,7 +348,7 @@ export default {
           );
           this.loadingCountryData = false;
         })
-        .catch(error => console.log("Error::", error));
+        .catch(error => (this.showSnackbar = true));
     }
   }
 };

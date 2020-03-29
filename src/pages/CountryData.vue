@@ -172,6 +172,16 @@
       <md-progress-bar md-mode="query"></md-progress-bar>
       <p style>Loading Data, Please wait</p>
     </div>
+
+    <!-- snackbar -->
+    <md-snackbar
+      :md-position="position"
+      :md-duration="isInfinity ? Infinity : duration"
+      :md-active.sync="showSnackbar"
+      md-persistent
+    >
+      <span>Error loading {{countryName}} data! Please try again</span>
+    </md-snackbar>
   </div>
 </template>
 
@@ -204,6 +214,10 @@ export default {
       lastUpdateTime: null,
       localTime: null,
       maxNum: null,
+      showSnackbar: false,
+      position: "center",
+      duration: 4000,
+      isInfinity: false,
       dailySalesChart: {
         data: {
           labels: [],
@@ -273,7 +287,7 @@ export default {
           // call function to display data on a chart
           this.mapData(response.stat_by_country);
         })
-        .catch(error => console.log("Error::", error));
+        .catch(error => (this.showSnackbar = true));
     },
     mapData(data) {
       // get get countries data per day into the chart
