@@ -16,6 +16,7 @@ const routes = [
       },
       {
         path: "/country/:name",
+        name: "Country",
         component: CountryData
       }
     ]
