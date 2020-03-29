@@ -1,5 +1,8 @@
 <template>
   <div class="content">
+    <div class="lastUpdate">
+      <span class="category">Last Update: {{lastUpdateTime}} || {{localTime}}</span>
+    </div>
     <div class="md-layout" v-if="!dataLoading">
       <!-- row 1 global stats cards -->
       <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
@@ -198,6 +201,8 @@ export default {
       },
       countryName: null,
       lastUpdate: null,
+      lastUpdateTime: null,
+      localTime: null,
       maxNum: null,
       dailySalesChart: {
         data: {
@@ -253,7 +258,11 @@ export default {
         .then(response => {
           const lastUpdateDay =
             response.stat_by_country[response.stat_by_country.length - 1];
-          this.lastUpdate = moment(lastUpdateDay.record_date).fromNow();
+          this.lastUpdate = moment.utc(lastUpdateDay.record_date).fromNow();
+          this.lastUpdateTime = moment.parseZone(lastUpdateDay.record_date);
+          this.localTime = new Date(
+            lastUpdateDay.record_date + " UTC"
+          ).toString();
           this.countryStats = lastUpdateDay;
 
           this.maxNum = parseFloat(lastUpdateDay.total_cases.replace(/,/g, "")); // set the chart heighest number
@@ -291,6 +300,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.lastUpdate {
+  margin: 15px 0;
+}
 .progress-bar-container {
   margin: 0;
   width: 100%;

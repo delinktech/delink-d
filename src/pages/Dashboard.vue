@@ -1,5 +1,8 @@
 <template>
   <div class="content">
+    <div class="lastUpdate">
+      <span class="category">Last Update: {{lastUpdateTime}} || {{localTime}}</span>
+    </div>
     <div class="md-layout">
       <!-- row 1 global stats cards -->
       <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
@@ -185,7 +188,7 @@
             </div>
           </template>
         </chart-card>
-      </div> -->
+      </div>-->
     </div>
   </div>
 </template>
@@ -215,7 +218,9 @@ export default {
         statistic_taken_at: null
       },
       lastUpdate: null,
-      countries: [],
+      lastUpdateTime: null,
+      localTime: null,
+      countries: []
       //     labels: ["M", "T", "W", "T", "F", "S", "S"],
       //     series: [[12, 17, 7, 17, 23, 18, 38]]
       //   },
@@ -308,7 +313,11 @@ export default {
     fetchWorldData() {
       getWorldStats()
         .then(response => {
-          this.lastUpdate = moment(response.statistic_taken_at).fromNow();
+          this.lastUpdate = moment.utc(response.statistic_taken_at).fromNow();
+          this.lastUpdateTime = moment.parseZone(response.statistic_taken_at);
+          this.localTime = new Date(
+            response.statistic_taken_at + " UTC"
+          ).toString();
           this.worldStats = response;
           this.loadingWorldData = false;
         })
@@ -331,6 +340,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.lastUpdate {
+  margin: 15px 0;
+}
 .md-progress-container {
   text-align: center;
 }
