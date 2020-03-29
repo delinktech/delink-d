@@ -150,7 +150,10 @@
       </div>-->
 
       <!-- row 3 global data on charts -->
-      <!-- <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
+      <div
+        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-66"
+        v-if="!dataLoading"
+      >
         <chart-card
           :chart-data="dailySalesChart.data"
           :chart-options="dailySalesChart.options"
@@ -158,22 +161,23 @@
           data-background-color="blue"
         >
           <template slot="content">
-            <h4 class="title">Daily Sales</h4>
-            <p class="category">
+            <h4 class="title">Cases per Day</h4>
+            <!-- <p class="category">
               <span class="text-success">
                 <i class="fas fa-long-arrow-alt-up"></i> 55%
               </span>
               increase in today sales.
-            </p>
+            </p>-->
           </template>
 
           <template slot="footer">
             <div class="stats">
-              <md-icon>access_time</md-icon>updated 4 minutes ago
+              <md-icon>access_time</md-icon>
+              updated {{lastUpdate}}
             </div>
           </template>
         </chart-card>
-      </div>-->
+      </div>
     </div>
   </div>
 </template>
@@ -185,12 +189,13 @@ import { StatsCard, ChartCard, OrderedTable } from "@/components";
 
 export default {
   components: {
-    StatsCard
-    // ChartCard,
+    StatsCard,
+    ChartCard
     // OrderedTable
   },
   data() {
     return {
+      dataLoading: true,
       countryStats: {
         total_cases: null,
         active_cases: null,
@@ -202,7 +207,27 @@ export default {
         record_date: null
       },
       countryName: null,
-      lastUpdate: null
+      lastUpdate: null,
+      maxNum: null,
+      dailySalesChart: {
+        data: {
+          labels: [],
+          series: []
+        },
+        options: {
+          lineSmooth: this.$Chartist.Interpolation.cardinal({
+            tension: 0
+          }),
+          low: 0,
+          high: 100, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          }
+        }
+      }
     };
   },
   created() {
@@ -213,14 +238,42 @@ export default {
     fetchCountryData(countryName) {
       getCasesForCountry(countryName)
         .then(response => {
-          console.log("CountryStats::", response);
-          this.lastUpdate = moment(
-            response.stat_by_country[response.stat_by_country.length - 1]
-          ).fromNow();
-          this.countryStats =
+          console.log("CountryStats::", response.stat_by_country);
+          const lastUpdateDay =
             response.stat_by_country[response.stat_by_country.length - 1];
+          this.lastUpdate = moment(lastUpdateDay).fromNow();
+          this.countryStats = lastUpdateDay;
+
+          this.maxNum = parseFloat(lastUpdateDay.total_cases.replace(/,/g, "")); // set the chart heighest number
+
+          this.dailySalesChart.options.high =
+            this.maxNum >= 1000 ? (this.maxNum / 1000) : this.maxNum; // check if max num is > 1000 and devide by 1000
+
+          // call function to display data on a chart
+          this.mapData(response.stat_by_country);
         })
         .catch(error => console.log("Error::", error));
+    },
+    mapData(data) {
+      // get get countries data per day into the chart
+      let series = data.map(d => ({ ...d, day: d.record_date.split(" ")[0] }));
+      series = series.reduce((a, c) => {
+        let estKey = c["day"];
+        (a[estKey] ? a[estKey] : (a[estKey] = null || [])).push(c);
+        return a;
+      }, {});
+      let finSeries = Object.values(series);
+      finSeries = finSeries.map(d => d[d.length - 1]);
+      const devideBy = this.maxNum >= 1000 ? 1000 : 1;
+      this.dailySalesChart.data.series[0] = finSeries.map(
+        r => parseFloat(r.total_cases.replace(/,/g, "")) / devideBy
+      ); // devide by 1000 to make it fit on chat
+
+      // get labels from the data monthly labels = days
+      this.dailySalesChart.data.labels = finSeries.map(r =>
+        moment(r.record_date.split(" ")[0]).format("D MMM YY")
+      );
+      this.dataLoading = false;
     }
   }
 };
