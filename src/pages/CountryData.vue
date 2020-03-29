@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <div class="md-layout">
+    <div class="md-layout" v-if="!dataLoading">
       <!-- row 1 global stats cards -->
       <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
         <stats-card data-background-color="blue">
@@ -136,24 +136,8 @@
         </stats-card>
       </div>
 
-      <!-- row 2 global data on a table -->
-      <!-- <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-        <md-card>
-          <md-card-header data-background-color="orange">
-            <h4 class="title">Global COVID-19 Stats</h4>
-            <p class="category">All countries and number of corona cases</p>
-          </md-card-header>
-          <md-card-content>
-            <ordered-table table-header-color="orange" :countries="countries"></ordered-table>
-          </md-card-content>
-        </md-card>
-      </div>-->
-
       <!-- row 3 global data on charts -->
-      <div
-        class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-66"
-        v-if="!dataLoading"
-      >
+      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-66">
         <chart-card
           :chart-data="dailySalesChart.data"
           :chart-options="dailySalesChart.options"
@@ -178,6 +162,12 @@
           </template>
         </chart-card>
       </div>
+    </div>
+
+    <!-- show data loading spinner -->
+    <div class="md-layout progress-bar-container" v-if="dataLoading">
+      <md-progress-bar md-mode="query"></md-progress-bar>
+      <p style>Loading Data, Please wait</p>
     </div>
   </div>
 </template>
@@ -261,10 +251,9 @@ export default {
     fetchCountryData(countryName) {
       getCasesForCountry(countryName)
         .then(response => {
-          console.log("CountryStats::", response.stat_by_country);
           const lastUpdateDay =
             response.stat_by_country[response.stat_by_country.length - 1];
-          this.lastUpdate = moment(lastUpdateDay).fromNow();
+          this.lastUpdate = moment(lastUpdateDay.record_date).fromNow();
           this.countryStats = lastUpdateDay;
 
           this.maxNum = parseFloat(lastUpdateDay.total_cases.replace(/,/g, "")); // set the chart heighest number
@@ -301,3 +290,22 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.progress-bar-container {
+  margin: 0;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.md-progress-bar {
+  margin: 24px;
+  width: 100%;
+}
+.progress-bar-container > p {
+  width: 100%;
+  text-align: center;
+  padding-top: 10px;
+}
+</style>
