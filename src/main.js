@@ -29,6 +29,7 @@ import GlobalDirectives from "./globalDirectives";
 import MaterialDashboard from "./material-dashboard";
 
 import Chartist from "chartist";
+import axistitle from "chartist-plugin-axistitle";
 
 // configure router
 const router = new VueRouter({
