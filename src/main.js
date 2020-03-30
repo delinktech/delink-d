@@ -33,6 +33,7 @@ import axistitle from "chartist-plugin-axistitle";
 
 // configure router
 const router = new VueRouter({
+  mode: "history",
   routes, // short for routes: routes
   linkExactActiveClass: "nav-item active"
 });
